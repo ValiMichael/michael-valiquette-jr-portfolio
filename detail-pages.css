@@ -1,0 +1,747 @@
+/* =============================================================================
+   detail-pages.css
+   Page-specific styles for project/patent detail pages
+   (vacuum-coffeemaker.html, humidor.html, etc.)
+
+   LOAD ORDER: This file loads AFTER styles.css, so same-specificity rules
+   here override those in styles.css. Use this intentionally to extend or
+   override global styles without touching the base stylesheet.
+   ============================================================================= */
+
+
+/* =============================================================================
+   HERO SECTION
+   Full-width banner with a background photo, gradient overlay, and text.
+   Three layers are stacked using absolute positioning + z-index:
+     0 — .project-hero-image (photo)
+     1 — .project-hero-overlay (gradient)
+     2 — .project-hero-content (title/tags)
+   ============================================================================= */
+
+.project-hero {
+    position: relative;
+    height: 325px;
+    display: flex;
+    align-items: center;
+    color: var(--light-text);
+}
+
+/* Wrapper that fills the full hero area behind the text */
+.project-hero-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+/* Photo covers the full hero area and is dimmed so text reads clearly */
+.project-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.65);
+}
+
+/* Gradient fades from semi-transparent at the top to near-black at the bottom,
+   so the white title text sitting near the bottom remains legible. */
+.project-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.95));
+    z-index: 1;
+    align-items: center;
+}
+
+/* Content (title + subtitle + tags) sits above both image and overlay */
+.project-hero-content {
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    padding: 4rem 4em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Back-navigation link (not used on vacuum page but available for other detail pages) */
+.back-link {
+    color: var(--light-text);
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    text-decoration: none;
+}
+
+/* Responsive font size: never smaller than 2rem, grows with viewport up to 3rem */
+.project-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin: 0;
+    padding-top: 75px;
+    /* Pushes title down to account for the fixed navbar height */
+}
+
+/* Accent-colored subtitle line below the main title */
+.project-subtitle {
+    font-size: 1.15rem;
+    color: #FF6B35;
+    margin: 0;
+    padding-bottom: 15px;
+}
+
+/* Tag pills in the hero — solid orange background, rounded corners */
+.project-meta .project-tag {
+    background: #FF6B35;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    margin-right: 1rem;
+    color: white;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Flexible tag row (used on some pages for a larger set of tags) */
+.portfolio-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+/* Individual tag pill using the primary CSS variable color */
+.tag {
+    background: var(--primary-color);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+/* =============================================================================
+   PORTFOLIO IMAGE GRID (detail page variant)
+   3-column grid of image cards used to showcase product photos/renderings.
+
+   EQUAL-HEIGHT CARDS: Cards use a flex-column layout so the fixed-height image
+   area (260px) never squishes, and the text area below flexes to fill whatever
+   space remains — keeping all cards in a row the same total height regardless
+   of how much text each card has.
+   ============================================================================= */
+
+.portfolio-grid {
+    max-width: 75%;
+    margin: 1.5rem auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+    /* stretch makes all grid cells the same height */
+}
+
+/* Each card is a flex column so image + content stack vertically */
+.portfolio-grid .portfolio-item {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Fixed image height — keeps all images the same size regardless of aspect ratio */
+.portfolio-grid .portfolio-image {
+    height: 260px;
+    flex-shrink: 0;
+    /* prevents the image from compressing when content is tall */
+}
+
+/* Text content area fills the remaining card height below the image */
+.portfolio-grid .portfolio-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Alternative wider grid variant (currently unused on vacuum page) */
+.portfolio-grid-2 {
+    max-width: 100%;
+    margin: 1.5rem auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+/* Taller image variant for hero-style portfolio items */
+.portfolio-item-1 .portfolio-image {
+    height: 375px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.portfolio-item-1 .portfolio-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Shared padding for all .portfolio-content areas (not just inside .portfolio-grid) */
+.portfolio-content {
+    padding: 0.5rem .5rem;
+}
+
+
+/* =============================================================================
+   PROJECT DESCRIPTION
+   Outer wrapper for "The Innovation" section. Slightly narrower than the
+   container (85%) so long text doesn't span the full page width, improving
+   readability on large monitors.
+   ============================================================================= */
+
+.project-description {
+    max-width: 85%;
+    margin: 2.5rem auto 0;
+    padding: 0 3rem;
+}
+
+.project-description h2 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    margin-bottom: 1rem;
+}
+
+/* Add vertical spacing between consecutive paragraphs */
+.project-description p+p {
+    margin-top: 1.5rem;
+}
+
+
+/* =============================================================================
+   DEVELOPMENT JOURNEY (standard content section wrapper)
+   Used for: Development Journey, Key Benefits, How It Works,
+             Technical Specifications, and other body sections.
+
+   This is the primary layout wrapper for all prose/content sections.
+   Max-width 85% + auto margins centers it; padding prevents text from
+   touching the edges on mid-size screens.
+   ============================================================================= */
+
+.content-section {
+    max-width: 85%;
+    margin: 2rem auto;
+    padding: 0 3rem;
+}
+
+/* Vertical spacing between paragraphs within a section */
+.content-section p+p {
+    margin-top: 1.5rem;
+}
+
+
+/* =============================================================================
+   PORTFOLIO ITEM ROW (1/4 - 1/2 - 1/4 layout)
+   Special 3-item row where the center item is twice as wide as the side items.
+   Used on other detail pages — not currently used on the vacuum page.
+   ============================================================================= */
+
+.portfolio-item-row-2 {
+    display: flex;
+    gap: 1.5rem;
+    margin: 1.5rem auto 0;
+    justify-content: center;
+}
+
+.portfolio-item-row-2 .portfolio-item:nth-child(1),
+.portfolio-item-row-2 .portfolio-item:nth-child(3) {
+    flex: 0 0 calc(25% - 0.75rem);
+}
+
+.portfolio-item-row-2 .portfolio-item:nth-child(2) {
+    flex: 0 0 calc(50% - 0.75rem);
+}
+
+.portfolio-item-row-2 .portfolio-image {
+    height: 350px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.portfolio-item-row-2 .portfolio-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* =============================================================================
+   SECTION HEADINGS
+   .project-content h3 catches all h3 elements inside the main content area,
+   giving them a larger, responsive size.
+
+   SPECIFICITY NOTE: This rule overrides the global styles.css rule for
+   .portfolio-content h3 because detail-pages.css loads after styles.css.
+   The fix below re-declares .portfolio-content h3 to restore card titles
+   to their intended smaller size.
+   ============================================================================= */
+
+/* All h3s inside the project content area (section headings like "Key Benefits") */
+.project-content h3 {
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    margin: 2.5rem 0 1.25rem;
+}
+
+/* Re-declare portfolio card titles to override the broad .project-content h3 rule above.
+   Without this, card titles ("Front View", "Back View", etc.) would be too large. */
+.portfolio-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+
+/* =============================================================================
+   PATENT OVERVIEW GRID
+   4-column grid of "stat" cards below the hero — shows Patent Number, Filed,
+   Granted, and Classification at a glance.
+   On mobile (≤768px) this collapses to 2 columns.
+   ============================================================================= */
+
+.project-overview {
+    margin-bottom: 2.5rem;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+/* Each stat card: subtle border with a very faint background */
+.overview-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+/* Label (e.g. "PATENT NUMBER") — small uppercase, accent color */
+.overview-item h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary-color);
+    margin: 0 0 0.5rem;
+}
+
+/* Value (e.g. "US10624491B1") — bold white text */
+.overview-item p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--light-text);
+    margin: 0;
+}
+
+
+/* =============================================================================
+   FEATURES GRID (Key Benefits)
+   2×2 grid of feature cards. Centered at 75% of the section width on desktop.
+   Collapses to a single column on mobile.
+   ============================================================================= */
+
+.features-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin: 0 auto 4.5rem;
+    /* auto left/right centers the grid within .content-section */
+}
+
+/* Feature card: subtle border, centered content, hover accent */
+.feature-item {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: border-color 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Highlight border on hover to add interactivity */
+.feature-item:hover {
+    border-color: var(--primary-color);
+}
+
+/* Emoji icon displayed at the top of each feature card */
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.feature-item h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+    color: var(--light-text);
+}
+
+/* Muted description text */
+.feature-item p {
+    color: var(--gray-text);
+    line-height: 1.7;
+    margin: 0;
+}
+
+
+/* =============================================================================
+   PROCESS TIMELINE (How It Works)
+   Vertical list of numbered steps. Each step has a circular orange badge
+   on the left and the step content on the right — more visual than a plain
+   numbered list while remaining semantic and accessible.
+   ============================================================================= */
+
+.process-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Each step is a horizontal row: number badge + content side by side */
+.timeline-step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+/* Circular numbered badge */
+.step-number {
+    width: 2.25rem;
+    height: 2.25rem;
+    min-width: 2.25rem;
+    /* prevents the circle from squishing on small screens */
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: white;
+}
+
+.step-content h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--light-text);
+}
+
+.step-content p {
+    color: var(--gray-text);
+    line-height: 1.7;
+    margin: 0;
+}
+
+
+/* =============================================================================
+   TECHNICAL SPECIFICATIONS
+   2-column grid of label/value pairs. Each .spec-item has an accent-colored
+   label and a white value — visually similar to a definition list but
+   styled with the site's card aesthetic.
+   ============================================================================= */
+
+.tech-specs {
+    margin-bottom: 2.5rem;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+/* Each spec row: faint background, accent border, flex row for label + value */
+.spec-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+}
+
+/* Label (e.g. "Brew Time:") — orange, bold, no-wrap so it never breaks mid-word */
+.spec-label {
+    color: var(--primary-color);
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+/* Value (e.g. "10 minutes") — white, readable size */
+.spec-value {
+    color: var(--light-text);
+    font-size: 1rem;
+}
+
+
+/* =============================================================================
+   CALLOUT BOX
+   High-visibility box with a warm orange tint used to surface the key
+   "what this demonstrates" message for recruiters quickly scanning the page.
+   Sits between the tech specs and the patent documentation heading.
+   ============================================================================= */
+
+.callout-box {
+    background: rgba(255, 107, 53, 0.07);
+    /* very faint orange tint */
+    border: 1px solid var(--primary-color);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Heading in accent color to draw immediate attention */
+.callout-box h4 {
+    font-size: 1.15rem;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.callout-box p {
+    color: var(--gray-text);
+    line-height: 1.8;
+    margin: 0;
+}
+
+
+/* =============================================================================
+   PATENT DOCUMENT VIEWER
+   Container for the inline PDF display. Consists of:
+     - .patent-doc-header: flex row with two action buttons
+         left  → "View on Google Patents" (secondary/outline style)
+         right → "Download PDF" (primary/filled style)
+         justify-content: space-between handles the left/right split
+     - .patent-iframe: the full PDF embedded inline at 800px tall
+
+   NOTE: The rgba border value in .patent-document intentionally uses 0. as the
+   alpha (effectively transparent) — the visual border comes from the rounded
+   corner radius of the overflow-hidden container instead.
+   ============================================================================= */
+
+.patent-document {
+    margin-bottom: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 2.5rem auto;
+}
+
+/* Button row: secondary button left, primary button right */
+.patent-doc-header {
+    display: flex;
+    justify-content: space-between;
+    /* pushes buttons to opposite ends */
+    padding: 2rem 2rem 1.5rem;
+    background: rgba(255, 255, 255, .07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Inline PDF frame — white background so the patent document is readable */
+.patent-iframe {
+    width: 100%;
+    height: 800px;
+    border: none;
+    display: block;
+    background: #fff;
+}
+
+
+/* =============================================================================
+   CALL TO ACTION (CTA)
+   Closing section that prompts visitors to get in touch.
+   Centered text with a top border separator, followed by two flex buttons.
+   ============================================================================= */
+
+.project-cta {
+    text-align: center;
+    padding: 3rem 0 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.project-cta h2 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    margin-bottom: 1rem;
+}
+
+.project-cta p {
+    color: var(--gray-text);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.8;
+}
+
+/* Button group: centered, wraps on small screens so buttons never overlap */
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+/* =============================================================================
+   RESPONSIVE — SMALL SCREENS (≤768px)
+   Adjustments for mobile viewports:
+   - Hero text centered, reduced padding
+   - Content sections go full-width with less horizontal padding
+   - Overview grid drops from 4 to 2 columns
+   - Features grid drops to single column (stacked vertically)
+   - Specs grid drops to single column
+   ============================================================================= */
+
+@media (max-width: 768px) {
+    .project-hero-content {
+        padding: 2rem 1rem;
+        text-align: center;
+        align-items: center;
+    }
+
+    .project-hero-image img {
+        filter: brightness(0.65);
+    }
+
+    /* Full-width text sections with reduced horizontal padding on mobile */
+    .project-description,
+    .content-section {
+        max-width: 100%;
+        padding: 0 1.5rem;
+    }
+
+    /* 2-column overview on mobile (still avoids single-column stacking) */
+    .overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Features and specs go to single column on the smallest screens */
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specs-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =============================================================================
+   LIGHTBOX
+   Full-screen image viewer triggered by clicking a portfolio image card.
+   Three layers inside the overlay:
+     - .lightbox-close  : X button (top-right)
+     - .lightbox-prev/next : arrow buttons (vertically centered, left/right)
+     - .lightbox-content : centered image + caption
+   The overlay itself acts as the close backdrop (click outside image to close).
+   ============================================================================= */
+
+/* Pointer cursor on image cards signals they are clickable */
+.portfolio-grid .portfolio-image {
+    cursor: pointer;
+}
+
+/* Full-screen dark overlay — hidden by default, shown via .active class */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+/* Centered image + caption wrapper */
+.lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    text-align: center;
+}
+
+/* Image scales to fit the viewport while preserving aspect ratio */
+.lightbox-img {
+    max-width: 90vw;
+    max-height: 82vh;
+    object-fit: contain;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Caption shown below the image (populated from the card's h3 text) */
+.lightbox-caption {
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+}
+
+/* Close button — top-right corner */
+.lightbox-close {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.75rem;
+    font-size: 2.5rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+    z-index: 1001;
+}
+
+.lightbox-close:hover {
+    opacity: 1;
+}
+
+/* Shared styles for prev and next arrow buttons */
+.lightbox-prev,
+.lightbox-next {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 4rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    opacity: 0.6;
+    padding: 0 1.25rem;
+    transition: opacity 0.2s;
+    z-index: 1001;
+    user-select: none;
+}
+
+.lightbox-prev {
+    left: 0;
+}
+
+.lightbox-next {
+    right: 0;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    opacity: 1;
+}
