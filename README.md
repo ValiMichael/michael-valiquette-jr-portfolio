@@ -13,7 +13,7 @@ Welcome! This is the source for my professional portfolio website, designed to s
 
 ## 🚀 Live Demo
 
-**See it in action:** (https://valimichael.github.io/michael-valiquette-jr-portfolio/)
+**See it in action:** (michaelvaliquettejr.com)
 
 ## 📂 Project Structure
 
